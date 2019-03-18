@@ -16,19 +16,18 @@ public class ManagerDaoImpl implements ManagerDao {
 
 	@Override
 	public List<Manager> getManagers() {
-		List <Manager> managerList = new ArrayList<>();
+		List<Manager> managerList = new ArrayList<>();
 		String sql = "SELECT * FROM MANAGER_TABLE";
 		ResultSet rs = null;
-		try (Connection con = ConnectionUtil.getConnection();
-				Statement s = con.createStatement();) {
+		try (Connection con = ConnectionUtil.getConnection(); Statement s = con.createStatement();) {
 			rs = s.executeQuery(sql);
-			while(rs.next()) {
+			while (rs.next()) {
 				int id = rs.getInt("MANAGER_ID");
 				String firstname = rs.getString("FIRSTNAME");
 				String lastname = rs.getString("LASTNAME");
 				String username = rs.getString("MANAGER_USERNAME");
 				String password = rs.getString("MANAGER_PASSWORD");
-				
+
 				Manager m = new Manager();
 				m.setId(id);
 				m.setFirstname(firstname);
@@ -37,10 +36,10 @@ public class ManagerDaoImpl implements ManagerDao {
 				m.setPassword(password);
 				managerList.add(m);
 			}
-	} catch (SQLException | IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+		} catch (SQLException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return managerList;
 	}
 
@@ -63,12 +62,12 @@ public class ManagerDaoImpl implements ManagerDao {
 		try (PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				String firstname = rs.getString("FIRSTNAME");
 				String lastname = rs.getString("LASTNAME");
 				String username = rs.getString("MANAGER_USERNAME");
 				String password = rs.getString("MANAGER_PASSWORD");
-				
+
 				man = new Manager();
 				man.setId(id);
 				man.setFirstname(firstname);
@@ -76,7 +75,7 @@ public class ManagerDaoImpl implements ManagerDao {
 				man.setUsername(username);
 				man.setPassword(password);
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,13 +83,12 @@ public class ManagerDaoImpl implements ManagerDao {
 		return man;
 	}
 
-	@Override	
+	@Override
 	public Manager getManagerByUsername(String username) {
 		Manager man = null;
 		String sql = "SELECT * FROM MANAGER_TABLE WHERE MANAGER_USERNAME = ?";
 		ResultSet rs = null;
-		try (Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setString(1, username);
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -98,7 +96,7 @@ public class ManagerDaoImpl implements ManagerDao {
 				String firstname = rs.getString("FIRSTNAME");
 				String lastname = rs.getString("LASTNAME");
 				String password = rs.getString("MANAGER_PASSWORD");
-				
+
 				man = new Manager();
 				man.setId(id);
 				man.setFirstname(firstname);
@@ -112,7 +110,29 @@ public class ManagerDaoImpl implements ManagerDao {
 		}
 		return man;
 	}
-	
-	
+
+	@Override
+	public List<Manager> getManagerFullName() {
+		List <Manager> managerList = new ArrayList<>();
+		String sql = "SELECT FIRSTNAME, LASTNAME FROM MANAGER_TABLE";
+		ResultSet rs = null;
+		try (Connection con = ConnectionUtil.getConnection();
+				Statement s = con.createStatement();) {
+			rs = s.executeQuery(sql);
+			while(rs.next()) {
+				String firstname = rs.getString("FIRSTNAME");
+				String lastname = rs.getString("LASTNAME");
+				
+				Manager m = new Manager();
+				m.setFirstname(firstname);
+				m.setLastname(lastname);
+				managerList.add(m);
+			}
+	} catch (SQLException | IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		return managerList;
+	}
 
 }

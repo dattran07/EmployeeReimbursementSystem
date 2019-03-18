@@ -21,17 +21,16 @@ public class RequestDaoImpl implements RequestDao {
 		Request req = null;
 		String sql = "SELECT * FROM REQUEST WHERE REQUEST_ID = ?";
 		ResultSet rs = null;
-		try(Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				req = populateRequest(rs, con);
 			}
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
-			if(rs != null) {
+			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
@@ -40,6 +39,31 @@ public class RequestDaoImpl implements RequestDao {
 			}
 		}
 		return req;
+	}
+
+	@Override
+	public BigDecimal getSumByType(String type) {
+		BigDecimal amount = new BigDecimal('0');
+		String sql = "SELECT SUM(AMOUNT) FROM REQUEST WHERE TYPE1 = ?";
+		ResultSet rs = null;
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+			ps.setString(1, type);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				amount = rs.getBigDecimal(1);
+			}
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return amount;
 	}
 
 	@Override
@@ -61,7 +85,7 @@ public class RequestDaoImpl implements RequestDao {
 				Employee e = ed.getEmployeeById(employeeId, con);
 				ManagerDao md = new ManagerDaoImpl();
 				Manager m = md.getManagerById(managerId, con);
-				
+
 				req = new Request();
 				req.setId(id);
 				req.setType(type);
@@ -82,25 +106,23 @@ public class RequestDaoImpl implements RequestDao {
 				}
 			}
 		}
-		
+
 		return req;
 	}
-	
-	
+
 	private List<Request> getRequestsByManagerId(int managerId, String sql) {
 		List<Request> requests = new ArrayList<>();
 		ResultSet rs = null;
-		try(Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			rs = ps.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				Request req = populateRequest(rs, con);
 				requests.add(req);
 			}
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
-			if(rs != null) {
+			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
@@ -108,10 +130,10 @@ public class RequestDaoImpl implements RequestDao {
 				}
 			}
 		}
-		
+
 		return requests;
 	}
-	
+
 	@Override
 	public List<Request> getRequest(int managerId) {
 		return getRequestsByManagerId(managerId, "SELECT * FROM REQUEST");
@@ -126,22 +148,21 @@ public class RequestDaoImpl implements RequestDao {
 	public List<Request> getResolvedRequests(int managerId) {
 		return getRequestsByManagerId(managerId, "SELECT * FROM REQUEST WHERE STATUS = 'resolved'");
 	}
-	
+
 	private List<Request> getRequestsByEmployeeId(int employeeId, String sql) {
 		List<Request> requests = new ArrayList<>();
 		ResultSet rs = null;
-		try(Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, employeeId);
 			rs = ps.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				Request req = populateRequest(rs, con);
 				requests.add(req);
 			}
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		} finally {
-			if(rs != null) {
+			if (rs != null) {
 				try {
 					rs.close();
 				} catch (SQLException e) {
@@ -149,10 +170,10 @@ public class RequestDaoImpl implements RequestDao {
 				}
 			}
 		}
-		
+
 		return requests;
 	}
-	
+
 	@Override
 	public List<Request> getRequestsByEmployeeId(int employeeId) {
 		return getRequestsByEmployeeId(employeeId, "SELECT * FROM REQUEST WHERE EMPLOYEE_ID = ?");
@@ -174,8 +195,7 @@ public class RequestDaoImpl implements RequestDao {
 	public void addRequest(Request r) {
 		r.setId(getNextId());
 		String sql = "INSERT INTO REQUEST (REQUEST_ID, TYPE1, STATUS, DECISION, AMOUNT, EMPLOYEE_ID) VALUES (?, ?, ?, ?, ?, ?)";
-		try (Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, r.getId());
 			ps.setString(2, r.getType());
 			ps.setString(3, r.getStatus());
@@ -187,19 +207,18 @@ public class RequestDaoImpl implements RequestDao {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private int getNextId() {
 		int nextId = -1;
 		ResultSet rs = null;
-		try (Connection con = ConnectionUtil.getConnection();
-				Statement s = con.createStatement();) {
+		try (Connection con = ConnectionUtil.getConnection(); Statement s = con.createStatement();) {
 			rs = s.executeQuery("SELECT MAX(REQUEST_ID) FROM REQUEST");
 			if (rs.next()) {
 				if (nextId == 0) {
 					nextId = 1;
 				} else {
 					nextId = rs.getInt(1) + 1;
-				}	
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -216,13 +235,12 @@ public class RequestDaoImpl implements RequestDao {
 		}
 		return nextId;
 	}
-	
+
 	@Override
 	public void updateRequest(Request r) {
 		String sql = "UPDATE REQUEST SET REQUEST_ID = ?, TYPE1 = ?, STATUS = ?, DECISION = ?, AMOUNT = ?, EMPLOYEE_ID = ?, MANAGER_ID = ? WHERE REQUEST_ID = ?";
-		
-		try (Connection con = ConnectionUtil.getConnection();
-				PreparedStatement ps = con.prepareStatement(sql);) {
+
+		try (Connection con = ConnectionUtil.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
 			ps.setInt(1, r.getId());
 			ps.setString(2, r.getType());
 			ps.setString(3, r.getStatus());
@@ -249,7 +267,7 @@ public class RequestDaoImpl implements RequestDao {
 		Employee e = ed.getEmployeeById(employeeId, con);
 		ManagerDao ad = new ManagerDaoImpl();
 		Manager m = ad.getManagerById(managerId, con);
-		
+
 		Request r = new Request();
 		r.setId(requestId);
 		r.setType(type);
@@ -260,5 +278,5 @@ public class RequestDaoImpl implements RequestDao {
 		r.setManager(m);
 		return r;
 	}
-	
+
 }

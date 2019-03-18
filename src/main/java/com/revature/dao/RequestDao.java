@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import com.revature.model.Request;
 
 public interface RequestDao {
 	Request getRequestById(int id);
+	BigDecimal getSumByType(String type);
 	Request getRequestById(int id, Connection con);
 	List<Request> getRequest(int employeeId);
 	List<Request> getPendingRequest(int managerId);

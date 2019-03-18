@@ -45,7 +45,9 @@
 							<form
 								class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 								<div class="input-group">
-									<input type="text" id="empName" name="empName"
+									<input type="text" class="form-control"
+										placeholder="Search for name..." aria-label="Search"
+										aria-describedby="basic-addon2" id="empName" name="empName" 
 										placeholder="Search for names..." onkeyup="myFunction()">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="button">
@@ -85,7 +87,8 @@
 						</div>
 						<div class="form-group col-md-6">
 							<select name="decision" class="form-control">
-								<option value="Select a Decision" selected>Select a Decision</option>
+								<option value="Select a Decision" selected>Select a
+									Decision</option>
 								<option value="approve">approve</option>
 								<option value="denied">denied</option>
 							</select>

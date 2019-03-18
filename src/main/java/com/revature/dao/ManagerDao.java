@@ -7,6 +7,7 @@ import com.revature.model.Manager;
 
 public interface ManagerDao {
 	List<Manager> getManagers();
+	List<Manager> getManagerFullName();
 	public Manager getManagerById(int managerId);
 	Manager getManagerById(int id, Connection con);
 	Manager getManagerByUsername(String username);
