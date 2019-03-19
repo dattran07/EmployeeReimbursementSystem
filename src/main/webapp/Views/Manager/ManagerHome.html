@@ -21,7 +21,32 @@
 	<div id="wrapper">
 
 		<!-- Sidebar -->
-		<ul class="sidebar navbar-nav" id="sidebar"></ul>
+		<ul class="sidebar navbar-nav" id="sidebar">
+			<li class="nav-item active">
+				<a class="nav-link" href="managerhome"> 
+					<i class="fas fa-fw fa-tachometer-alt"></i> 
+					<span>Dashboard</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="managerminion">
+					<i class="fa fa-users"></i> 
+					<span>Employees</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="expense">
+					<i class="fas fa-list-alt"></i> 
+					<span>Expenses</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="logout"> 
+					<i class="fas fa-sign-out-alt"></i> 
+					<span>Logout</span>
+				</a>
+			</li>
+		</ul>
 
 		<div id="content-wrapper">
 
@@ -37,9 +62,9 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<input type="checkbox" id="all" name="requesttype">all <input
-								type="checkbox" id="pending" name="requesttype">pending
-							<input type="checkbox" id="resolved" name="requesttype">resolved
+							<input type="radio" id="all" name="requesttype" onclick="ShowAll()" checked="checked">all 
+							<input type="radio" id="pending" name="requesttype" onclick="ShowPending()">pending
+							<input type="radio" id="resolved" name="requesttype" onclick="ShowResolved()">resolved
 							&nbsp;&nbsp;&nbsp;
 
 							<form
@@ -127,9 +152,8 @@
 		crossorigin="anonymous"></script>
 
 	<script src="Scripts/Navbar.js"></script>
-	<script src="Scripts/ManagerJS/ManagerHome.js"></script>
 	<script src="Scripts/ManagerJS/ManagerSidebar.js"></script>
-
-
+	<script src="Scripts/ManagerJS/ManagerHome.js"></script>
+	
 </body>
 </html>

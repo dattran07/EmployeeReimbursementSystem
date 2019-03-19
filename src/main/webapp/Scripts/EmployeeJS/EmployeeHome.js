@@ -1,39 +1,14 @@
-let pendingChecked = false;
-let resolvedChecked = false;
-let allChecked = false;
+document.addEventListener("DOMContentLoaded", function (e) {
+  createOnStartUp();
+})
 
 let url = "http://localhost:8080/Revature/employeeallReqs";
 
-function setUrl() {
-	if (pendingChecked) {
-		url = "http://localhost:8080/Revature/employeependingReqs";
-	} else if (resolvedChecked) {
-		url = "http://localhost:8080/Revature/employeeresolvedReqs";
-	} else if (allChecked) {
-		url = "http://localhost:8080/Revature/employeeallReqs";
-	}
+const createOnStartUp = () => {
+	sendAjaxGet(url, display);
 }
 
-document.getElementById("all").addEventListener("change", function() {
-	allChecked = this.checked;
-	setUrl();
-	sendAjaxGet(url, display);
-});
-
-document.getElementById("pending").addEventListener("change", function() {
-	pendingChecked = this.checked;
-	setUrl();
-	sendAjaxGet(url, display);
-});
-
-document.getElementById("resolved").addEventListener("change", function() {
-	resolvedChecked = this.checked;
-	setUrl();
-	sendAjaxGet(url, display);
-});
-
-
-function sendAjaxGet(url, func) {
+const sendAjaxGet = (url, func) => {
 	let xhr = new XMLHttpRequest() || new ActiveXObject("Microsoft.HTTPRequest");
 	xhr.onreadystatechange = function() {
 		if (this.readyState==4 && this.status==200) {
@@ -44,9 +19,7 @@ function sendAjaxGet(url, func) {
 	xhr.send();
 }
 
-sendAjaxGet(url, display);
-
-function display(xhr) {
+const display = (xhr) => {
 	requestArr = JSON.parse(xhr.responseText).requests;
 	let table = document.getElementById("requestTable");
 	table.removeChild(document.getElementById("requestTableBody"));
@@ -65,4 +38,19 @@ function display(xhr) {
 			`
 		newBody.appendChild(newRow);
 	}
+}
+
+const ShowAll = () => {
+	url = "http://localhost:8080/Revature/employeeallReqs";
+	sendAjaxGet(url, display);
+}
+
+const ShowPending = () => {
+	url = "http://localhost:8080/Revature/employeependingReqs";
+	sendAjaxGet(url, display);
+}
+
+const ShowResolved = () => {
+	url = "http://localhost:8080/Revature/employeeresolvedReqs";
+	sendAjaxGet(url, display);
 }

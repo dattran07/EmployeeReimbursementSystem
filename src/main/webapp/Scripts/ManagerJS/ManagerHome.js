@@ -2,42 +2,10 @@ document.addEventListener("DOMContentLoaded", function (e) {
   createOnStartUp();
 })
 
-let pendingChecked = false;
-let resolvedChecked = false;
-let allChecked = false;
 let url = "http://localhost:8080/Revature/managerallReqs";
 
 const createOnStartUp = () => {
-	
-	document.getElementById("all").addEventListener("change", function() {
-		allChecked = this.checked;
-		setUrl();
-		sendAjaxGet(url, display);
-	});
-
-	document.getElementById("pending").addEventListener("change", function() {
-		pendingChecked = this.checked;
-		setUrl();
-		sendAjaxGet(url, display);
-	});
-
-	document.getElementById("resolved").addEventListener("change", function() {
-		resolvedChecked = this.checked;
-		setUrl();
-		sendAjaxGet(url, display);
-	});
-	
 	sendAjaxGet(url, display);
-}
-
-const setUrl = () => {
-	if (pendingChecked) {
-		url = "http://localhost:8080/Revature/managerpendingReqs";
-	} else if (resolvedChecked) {
-		url = "http://localhost:8080/Revature/managerresolvedReqs";
-	} else if (allChecked) {
-		url = "http://localhost:8080/Revature/managerallReqs";
-	}
 }
 
 const sendAjaxGet = (url, func) => {
@@ -94,10 +62,17 @@ const myFunction = () => {
     }
 }
 
-// Toggle the side navigation
-$("#sidebarToggle").on('click', function (e) {
-	e.preventDefault();
-	$("body").toggleClass("sidebar-toggled");
-	$(".sidebar").toggleClass("toggled");
-});	
+const ShowAll = () => {
+	url = "http://localhost:8080/Revature/managerallReqs";
+	sendAjaxGet(url, display);
+}
 
+const ShowPending = () => {
+	url = "http://localhost:8080/Revature/managerpendingReqs";
+	sendAjaxGet(url, display);
+}
+
+const ShowResolved = () => {
+	url = "http://localhost:8080/Revature/managerresolvedReqs";
+	sendAjaxGet(url, display);
+}
