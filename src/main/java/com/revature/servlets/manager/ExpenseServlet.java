@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.revature.utility.User;
 
-
-public class ManagerProfile extends HttpServlet {
+public class ExpenseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 
-    public ManagerProfile() {
+    public ExpenseServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -23,7 +22,7 @@ public class ManagerProfile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		RequestDispatcher rq;
 		if (!User.isManagerNull()) {
-			rq = request.getRequestDispatcher("Views/Manager/ManagerProfile.html");
+			rq = request.getRequestDispatcher("Views/Manager/Expenses.html");
 		} else {
 			rq = request.getRequestDispatcher("Views/Login.html");
 		}

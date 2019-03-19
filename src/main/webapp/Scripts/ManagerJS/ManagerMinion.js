@@ -15,7 +15,6 @@ sendAjaxGet(url, display);
 
 function display(xhr) {
 	employeeArr = JSON.parse(xhr.response).requests;
-	console.log(employeeArr);
 	let table = document.getElementById("employeeTable");
 	let newBody = document.createElement("tbody");
 	newBody.setAttribute("id", "employeehome");
@@ -32,5 +31,4 @@ function display(xhr) {
 		newBody.appendChild(newRow);
 	}
 }
-
 
